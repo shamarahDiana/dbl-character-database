@@ -197,10 +197,11 @@
                 const characterName = card.dataset.name || "";
                 const isMatch = characterName.includes(query);
 
-                card.hidden = !isMatch;
-
                 if (isMatch) {
+                    card.style.display = "";
                     visibleCount++;
+                } else {
+                    card.style.display = "none";
                 }
             });
 
