@@ -85,7 +85,6 @@
                 title="{{ character.name }}"
                 data-name="{{ character.name|lower }}"
                 data-rarity="{{ character.rarity|upper }}"
-                data-original-index="{{ loop.index0 }}"
             >
                 <div class="character-thumb {% if character.is_zenkai %}character-thumb-bg-zenkai{% else %}character-thumb-bg{% endif %}">
                     <div class="backing {{ character.type }}"></div>
@@ -144,49 +143,13 @@
 
     <script>
         const searchInput = document.getElementById("live-search");
-        const grid = document.getElementById("character-grid");
         const cards = Array.from(document.querySelectorAll(".character-card"));
         const resultsCount = document.getElementById("results-count");
-
-        const rarityPriority = {
-            "ULTRA": 1,
-            "SPARKING": 2,
-            "LEGEND": 2,
-            "EXTREME": 3,
-            "HERO": 4
-        };
 
         let searchFrame = null;
 
         function normalizeText(text) {
             return text.toLowerCase().trim();
-        }
-
-        function sortCharactersByRarity() {
-            const sortedCards = [...cards].sort((a, b) => {
-                const rarityA = a.dataset.rarity || "";
-                const rarityB = b.dataset.rarity || "";
-
-                const priorityA = rarityPriority[rarityA] || 99;
-                const priorityB = rarityPriority[rarityB] || 99;
-
-                if (priorityA !== priorityB) {
-                    return priorityA - priorityB;
-                }
-
-                const nameA = a.dataset.name || "";
-                const nameB = b.dataset.name || "";
-
-                if (nameA !== nameB) {
-                    return nameA.localeCompare(nameB);
-                }
-
-                return Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex);
-            });
-
-            sortedCards.forEach(card => {
-                grid.appendChild(card);
-            });
         }
 
         function liveSearchCharacters() {
@@ -216,10 +179,7 @@
             searchFrame = requestAnimationFrame(liveSearchCharacters);
         });
 
-        window.addEventListener("DOMContentLoaded", () => {
-            sortCharactersByRarity();
-            liveSearchCharacters();
-        });
+        window.addEventListener("DOMContentLoaded", liveSearchCharacters);
     </script>
 
 </body>
