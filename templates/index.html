@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Ball Legends Character Database</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Dragon Ball Legends Character Database</h1>
+        <p class="subtitle">Browse, search, and filter all characters</p>
+    </header>
+
+    <div class="filters">
+        <form method="GET" action="/">
+            <input type="text" name="search" placeholder="Search by name..."
+                value="{{ request.args.get('search', '') }}">
+
+            <select name="type">
+                <option value="">All Types</option>
+                {% for type in types %}
+                <option value="{{ type }}" {% if request.args.get('type') == type %}selected{% endif %}>
+                    {{ type }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select name="rarity">
+                <option value="">All Rarities</option>
+                {% for rarity in rarities %}
+                <option value="{{ rarity }}" {% if request.args.get('rarity') == rarity %}selected{% endif %}>
+                    {{ rarity }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select name="tag">
+                <option value="">All Tags</option>
+                {% for tag in tags %}
+                <option value="{{ tag }}" {% if request.args.get('tag') == tag %}selected{% endif %}>
+                    {{ tag }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <select name="is_ll">
+                <option value="">LF/LL Status</option>
+                <option value="true" {% if request.args.get('is_ll') == 'true' %}selected{% endif %}>LF/LL Only</option>
+                <option value="false" {% if request.args.get('is_ll') == 'false' %}selected{% endif %}>Non LF/LL</option>
+            </select>
+
+            <select name="is_zenkai">
+                <option value="">Zenkai Status</option>
+                <option value="true" {% if request.args.get('is_zenkai') == 'true' %}selected{% endif %}>Zenkai Only</option>
+                <option value="false" {% if request.args.get('is_zenkai') == 'false' %}selected{% endif %}>Non Zenkai</option>
+            </select>
+
+            <button type="submit">Search</button>
+            <a href="/">Clear</a>
+        </form>
+    </div>
+
+    <div class="results-count">
+        Showing {{ characters|length }} characters
+    </div>
+
+    <div class="character-grid">
+        {% for character in characters %}
+        <a href="/character/{{ character[0] }}" class="character-card type-border-{{ character[2] }}">
+            <h3>{{ character[1] }}</h3>
+            <p><span class="type-pill type-{{ character[2] }}">{{ character[2] }}</span> {{ character[3] }}</p>
+            <div class="card-badges">
+                {% if character[4] %}
+                <span class="badge badge-ll">LF/LL</span>
+                {% endif %}
+                {% if character[5] %}
+                <span class="badge badge-zenkai">Zenkai</span>
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

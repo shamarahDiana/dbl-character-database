@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ character[1] }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Dragon Ball Legends Character Database</h1>
+        <a href="/" class="back-btn">← Back to Characters</a>
+    </header>
+
+    <div class="character-detail">
+
+        <h2>{{ character[1] }}</h2>
+
+        <div class="detail-info">
+            <p><strong>Type:</strong> {{ character[2] }}</p>
+            <p><strong>Rarity:</strong> {{ character[3] }}</p>
+            <p><strong>LF/LL:</strong> {{ "Yes" if character[4] else "No" }}</p>
+            <p><strong>Zenkai:</strong> {{ "Yes" if character[5] else "No" }}</p>
+        </div>
+
+        <div class="detail-tags">
+            <h3>Tags</h3>
+            {% if tags %}
+                <div class="tags-list">
+                    {% for tag in tags %}
+                    <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No tags available.</p>
+            {% endif %}
+        </div>
+
+        <div class="detail-stats">
+            <h3>Base Stats</h3>
+            {% if stats %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stat</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stat in stats %}
+                        <tr>
+                            <td>{{ stat[0] }}</td>
+                            <td>{{ stat[1] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No stats available.</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+</body>
+</html>
