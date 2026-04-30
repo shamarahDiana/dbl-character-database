@@ -9,62 +9,82 @@
 <body>
 
     <header>
-        <h1>Dragon Ball Legends Character Database</h1>
-        <a href="/" class="back-btn">← Back to Characters</a>
+        <div class="content-container">
+            <h1>Dragon Ball Legends Character Database</h1>
+            <a href="/" class="back-btn">← Back to Characters</a>
+        </div>
     </header>
 
     <div class="character-detail">
 
         {% if character.image_url %}
-        <div class="character-detail-image-wrap {% if not character.is_zenkai %}character-detail-image-wrap-bg{% endif %}">
+        <div class="character-detail-image-wrap {% if character.is_zenkai %}character-detail-image-wrap-bg-zenkai{% else %}character-detail-image-wrap-bg{% endif %}">
             <img src="{{ character.image_url }}" alt="{{ character.name }}" class="character-detail-image">
+
+            <div class="detail-card-number">
+                {{ character.char_id }}
+            </div>
+
+            {% if character.rarity == "ULTRA" %}
+            <div class="detail-rarity-logo detail-rarity-logo-ULTRA"></div>
+            {% elif character.rarity == "SPARKING" %}
+            <div class="detail-rarity-logo detail-rarity-logo-SPARKING"></div>
+            {% elif character.rarity == "EXTREME" %}
+            <div class="detail-rarity-logo detail-rarity-logo-EXTREME"></div>
+            {% elif character.rarity == "HERO" %}
+            <div class="detail-rarity-logo detail-rarity-logo-HERO"></div>
+            {% elif character.rarity == "LEGEND" %}
+            <div class="detail-rarity-logo detail-rarity-logo-SPARKING"></div>
+            {% endif %}
         </div>
         {% endif %}
 
-        <h2>{{ character.name }}</h2>
+        <div class="character-info-panel">
+            <h2>{{ character.name }}</h2>
 
-        <div class="detail-info">
-            <p><strong>Type:</strong> {{ character.type }}</p>
-            <p><strong>Rarity:</strong> {{ character.rarity }}</p>
-            <p><strong>LF/LL:</strong> {{ "Yes" if character.is_ll else "No" }}</p>
-            <p><strong>Zenkai:</strong> {{ "Yes" if character.is_zenkai else "No" }}</p>
-        </div>
+            <div class="detail-info">
+                <p><strong>Type:</strong> {{ character.type }}</p>
+                <p><strong>Rarity:</strong> {{ character.rarity }}</p>
+                <p><strong>LF/LL:</strong> {{ "Yes" if character.is_ll else "No" }}</p>
+                <p><strong>Zenkai:</strong> {{ "Yes" if character.is_zenkai else "No" }}</p>
+            </div>
 
-        <div class="detail-tags">
-            <h3>Tags</h3>
-            {% if tags %}
-                <div class="tags-list">
-                    {% for tag in tags %}
-                    <span class="tag">{{ tag }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p>No tags available.</p>
-            {% endif %}
-        </div>
-
-        <div class="detail-stats">
-            <h3>Base Stats</h3>
-            {% if stats %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Stat</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for stat in stats %}
-                        <tr>
-                            <td>{{ stat[0] }}</td>
-                            <td>{{ stat[1] }}</td>
-                        </tr>
+            <div class="detail-tags">
+                <h3>Tags</h3>
+                {% if tags %}
+                    <div class="tags-list">
+                        {% for tag in tags %}
+                        <span class="tag">{{ tag }}</span>
                         {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>No stats available.</p>
-            {% endif %}
+                    </div>
+                {% else %}
+                    <p>No tags available.</p>
+                {% endif %}
+            </div>
+
+            <div class="detail-stats">
+                <h3>Base Stats</h3>
+                {% if stats %}
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Stat</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for stat in stats %}
+                            <tr>
+                                <td>{{ stat[0] }}</td>
+                                <td>{{ stat[1] }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No stats available.</p>
+                {% endif %}
+            </div>
         </div>
 
     </div>

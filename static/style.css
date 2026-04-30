@@ -6,13 +6,26 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #0a0a0f;
+    background-color: #f4f4f4;
+    background-image: url("/static/home_assets/bg.webp");
+    background-repeat: repeat-y;
+    background-size: 100% auto;
+    background-position: center top;
+    background-attachment: scroll;
     color: #e8e8e8;
     min-height: 100vh;
 }
 
+.content-container {
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
 header {
-    background: linear-gradient(135deg, #0d1b2a, #1a2a3a);
+    background: rgba(5, 8, 12, 0.95);
     padding: 25px 20px;
     text-align: center;
     border-bottom: 2px solid #c8960c;
@@ -21,12 +34,11 @@ header {
 header h1 {
     font-size: 2rem;
     color: #f0c040;
-    text-shadow: 0 0 20px rgba(240, 192, 64, 0.4);
     letter-spacing: 2px;
 }
 
 header p.subtitle {
-    color: #a0b0c0;
+    color: #d0d8e0;
     font-size: 0.9rem;
     margin-top: 5px;
 }
@@ -44,7 +56,7 @@ header p.subtitle {
 }
 
 .filters {
-    background: linear-gradient(180deg, #0d1b2a, #0a1520);
+    background: rgba(5, 12, 20, 0.95);
     padding: 15px 20px;
     border-bottom: 1px solid #1e3a5a;
 }
@@ -87,7 +99,7 @@ header p.subtitle {
 }
 
 .filters a {
-    color: #a0b0c0;
+    color: #d0d8e0;
     text-decoration: none;
     font-size: 0.85rem;
 }
@@ -96,99 +108,212 @@ header p.subtitle {
     color: #f0c040;
 }
 
+.main-content {
+    background: transparent;
+    min-height: calc(100vh - 140px);
+    padding-top: 10px;
+    padding-bottom: 30px;
+}
+
 .results-count {
     text-align: center;
     padding: 10px;
-    color: #607080;
+    color: #1a1b1f;
     font-size: 0.85rem;
+    font-weight: bold;
+    text-shadow: 0 0 4px #ffffff;
 }
 
 .character-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, 190px);
-    gap: 16px;
+    grid-template-columns: repeat(6, 190px);
+    gap: 12px;
     justify-content: center;
-    padding: 20px;
+    padding: 20px 0;
+    background: transparent;
 }
 
 .character-card {
     width: 190px;
-    height: 190px;
-    border-radius: 6px;
+    height: 157px;
+    display: block;
     text-decoration: none;
     color: #ffffff;
     overflow: hidden;
-    display: block;
-    border: 1px solid #1e3a5a;
-    background-color: #05080c;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: transform 0.15s ease;
+    content-visibility: auto;
+    contain-intrinsic-size: 190px 157px;
 }
 
 .character-card:hover {
     transform: translateY(-4px);
-    border-color: #c8960c;
 }
 
-.character-card-image-wrap {
+.character-thumb {
     width: 190px;
-    height: 190px;
-    background-color: #05080c;
-    background-image: var(--type-bg), var(--brush-bg);
-    background-repeat: no-repeat, no-repeat;
-    background-size: cover, cover;
-    background-position: center, center;
+    height: 157px;
     position: relative;
     overflow: hidden;
+    background-color: #05080c;
+    background-repeat: no-repeat;
+    background-size: cover, 500px;
+    background-position: center;
+    border-radius: 4px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.45);
 }
 
-.character-card-image-wrap-bg {
-    --brush-bg: url("/characters_image/background/Hom_pltBrush_Reg.webp");
+.character-thumb-bg {
+    background-image: url("/characters_image/background/Hom_pltBrush_Reg.webp");
 }
 
-.character-card-image-wrap-bg-zenkai {
-    --brush-bg: url("/characters_image/background/Hom_pltBrush_Plenty.webp");
+.character-thumb-bg-zenkai {
+    background-image: url("/characters_image/background/Hom_pltBrush_Plenty.webp");
 }
 
-.character-card-type-BLU {
-    --type-bg: url("/characters_image/types/Attribute_BLU.webp");
+/* Type color layer is behind the character image */
+.backing {
+    width: 204px;
+    height: 82px;
+    position: absolute;
+    left: -7px;
+    bottom: -13px;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center bottom;
+    pointer-events: none;
 }
 
-.character-card-type-PUR {
-    --type-bg: url("/characters_image/types/Attribute_PUR.webp");
+.backing.BLU {
+    background-image: url("/characters_image/types/Attribute_BLU.webp");
 }
 
-.character-card-type-RED {
-    --type-bg: url("/characters_image/types/Attribute_RED.webp");
+.backing.PUR {
+    background-image: url("/characters_image/types/Attribute_PUR.webp");
 }
 
-.character-card-type-YEL {
-    --type-bg: url("/characters_image/types/Attribute_YEL.webp");
+.backing.RED {
+    background-image: url("/characters_image/types/Attribute_RED.webp");
 }
 
-.character-card-type-GRN {
-    --type-bg: url("/characters_image/types/Attribute_GRN.webp");
+.backing.YEL {
+    background-image: url("/characters_image/types/Attribute_YEL.webp");
 }
 
-.character-card-icon-image,
-.character-card-image {
+.backing.GRN {
+    background-image: url("/characters_image/types/Attribute_GRN.webp");
+}
+
+.backing.LGT {
+    background-image: url("/characters_image/types/Attribute_LGT.webp");
+}
+
+.backing.DRK {
+    background-image: url("/characters_image/types/Attribute_DRK.webp");
+}
+
+/* Character image is above the type color layer */
+.carder {
     width: 190px;
     height: 190px;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
     position: absolute;
     left: 0;
     top: 0;
     z-index: 2;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
 }
 
-.character-card-name {
+.lfbanner {
+    width: 162px;
+    height: 32px;
+    position: absolute;
+    left: 50%;
+    top: 17px;
+    transform: translateX(-50%);
+    z-index: 6;
+    background-image: url("/characters_image/background/CharaInfo_icnLimitedPlate.webp");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+}
+
+.lfname {
+    width: 162px;
+    height: 32px;
+    position: absolute;
+    left: 50%;
+    top: 17px;
+    transform: translateX(-50%);
+    z-index: 7;
+    color: #1a1b1f;
+    text-shadow: 0 0 2px #ffffff;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zenkaiicon {
+    width: 65px;
+    height: 50px;
+    position: absolute;
+    right: 3px;
+    bottom: 2px;
+    z-index: 8;
+    background-image: url("/characters_image/background/CharaInfo_icnPlentySymbol.webp");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right bottom;
+    pointer-events: none;
+}
+
+.rarity {
+    width: 64px;
+    height: 40px;
+    position: absolute;
+    left: 4px;
+    bottom: 3px;
+    z-index: 7;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left bottom;
+    pointer-events: none;
+}
+
+.rarity.ULTRA {
+    background-image: url("/characters_image/rarities/Rarity_UL.png");
+}
+
+.rarity.SPARKING {
+    background-image: url("/characters_image/rarities/Rarity_SP.webp");
+}
+
+.rarity.EXTREME {
+    background-image: url("/characters_image/rarities/Rarity_EX.png");
+}
+
+.rarity.HERO {
+    background-image: url("/characters_image/rarities/Rarity_HE.png");
+}
+
+.rarity.LEGEND {
+    background-image: url("/characters_image/rarities/Rarity_SP.webp");
+}
+
+.card-header.name {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 4;
-    padding: 4px 6px;
+    z-index: 9;
+    padding: 3px 5px;
     background-color: rgba(30, 30, 30, 0.35);
     text-shadow: 4px 4px 8px #000000;
     color: #ffffff;
@@ -200,32 +325,13 @@ header p.subtitle {
     text-overflow: ellipsis;
 }
 
-.character-card-info {
-    position: absolute;
-    left: 6px;
-    bottom: 6px;
-    right: 6px;
-    z-index: 4;
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.rarity-text {
-    color: #d8e8ff;
-    font-size: 0.68rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px #000000;
-}
-
 .type-pill {
     display: inline-block;
-    padding: 2px 8px;
+    padding: 2px 7px;
     border-radius: 4px;
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     font-weight: bold;
-    margin-right: 0;
+    line-height: 1;
 }
 
 .type-BLU { background-color: #1a4a8a; color: white; }
@@ -255,8 +361,9 @@ header p.subtitle {
     display: inline-block;
     padding: 2px 7px;
     border-radius: 10px;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: bold;
+    line-height: 1;
 }
 
 .badge-ll {
@@ -269,28 +376,29 @@ header p.subtitle {
     color: white;
 }
 
+/* Character detail page */
+
 .character-detail {
-    max-width: 880px;
+    width: min(1176px, calc(100% - 32px));
     margin: 30px auto;
-    background: linear-gradient(135deg, #0d1b2a, #0a1520);
-    border-radius: 10px;
-    padding: 30px;
+    background: rgba(12, 18, 26, 0.94);
+    border-radius: 8px;
+    padding: 0;
     border: 1px solid #1e3a5a;
+    overflow: hidden;
 }
 
 .character-detail-image-wrap {
     width: 100%;
-    max-width: 620px;
-    height: 280px;
-    margin: 0 auto 20px auto;
+    aspect-ratio: 4 / 1;
+    min-height: 220px;
+    max-height: 294px;
+    margin: 0;
     overflow: hidden;
     background-color: #05080c;
-    border: 1px solid #1e3a5a;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
+    border: none;
+    border-radius: 0;
+    display: block;
     position: relative;
 }
 
@@ -301,14 +409,63 @@ header p.subtitle {
     background-position: center;
 }
 
+.character-detail-image-wrap-bg-zenkai {
+    background-image: url("/characters_image/background/Hom_pltBrush_Plenty.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 .character-detail-image {
-    width: 150%;
+    width: 100%;
+    height: 100%;
     max-width: none;
-    height: auto;
-    object-fit: unset;
-    object-position: center;
+    object-fit: cover;
+    object-position: center center;
     display: block;
-    transform: translateY(18px);
+    transform: none;
+}
+
+.detail-card-number {
+    position: absolute;
+    top: 18px;
+    right: 24px;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.detail-rarity-logo {
+    position: absolute;
+    right: 24px;
+    bottom: 28px;
+    width: 190px;
+    height: 62px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right center;
+    pointer-events: none;
+}
+
+.detail-rarity-logo-ULTRA {
+    background-image: url("/characters_image/rarities/Gas_txtRarity_ULTRA.webp");
+}
+
+.detail-rarity-logo-SPARKING {
+    background-image: url("/characters_image/rarities/Gas_txtRarity_SPARKING.webp");
+}
+
+.detail-rarity-logo-EXTREME {
+    background-image: url("/characters_image/rarities/Gas_txtRarity_EXTREME.webp");
+}
+
+.detail-rarity-logo-HERO {
+    background-image: url("/characters_image/rarities/Gas_txtRarity_HERO.webp");
+}
+
+.character-info-panel {
+    padding: 28px 30px 34px;
 }
 
 .character-detail h2 {
@@ -317,6 +474,7 @@ header p.subtitle {
     margin-bottom: 20px;
     border-bottom: 1px solid #1e3a5a;
     padding-bottom: 10px;
+    text-shadow: none;
 }
 
 .detail-info {
@@ -342,6 +500,7 @@ header p.subtitle {
     font-size: 1.1rem;
     margin-bottom: 12px;
     color: #f0c040;
+    text-shadow: none;
 }
 
 .tags-list {
@@ -382,4 +541,78 @@ table td {
 table tr:hover td {
     background-color: #0d1b2a;
     color: #e8e8e8;
+}
+
+@media (max-width: 1240px) {
+    .content-container {
+        max-width: 1040px;
+    }
+
+    .character-grid {
+        grid-template-columns: repeat(5, 190px);
+    }
+}
+
+@media (max-width: 1040px) {
+    .content-container {
+        max-width: 840px;
+    }
+
+    .character-grid {
+        grid-template-columns: repeat(4, 190px);
+    }
+}
+
+@media (max-width: 840px) {
+    .content-container {
+        max-width: 640px;
+    }
+
+    .character-grid {
+        grid-template-columns: repeat(3, 190px);
+    }
+
+    .character-detail-image-wrap {
+        min-height: 180px;
+    }
+
+    .detail-card-number {
+        right: 14px;
+        top: 12px;
+        font-size: 1rem;
+    }
+
+    .detail-rarity-logo {
+        right: 14px;
+        bottom: 18px;
+        width: 145px;
+        height: 48px;
+    }
+
+    .character-info-panel {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 640px) {
+    .content-container {
+        max-width: 440px;
+    }
+
+    .character-grid {
+        grid-template-columns: repeat(2, 190px);
+    }
+
+    .character-detail {
+        width: calc(100% - 20px);
+    }
+
+    .character-detail-image-wrap {
+        min-height: 140px;
+    }
+
+    .detail-rarity-logo {
+        width: 120px;
+        height: 42px;
+    }
 }
