@@ -68,16 +68,33 @@
 
     <div class="character-grid">
         {% for character in characters %}
-        <a href="/character/{{ character[0] }}" class="character-card type-border-{{ character[2] }}">
-            <h3>{{ character[1] }}</h3>
-            <p><span class="type-pill type-{{ character[2] }}">{{ character[2] }}</span> {{ character[3] }}</p>
-            <div class="card-badges">
-                {% if character[4] %}
-                <span class="badge badge-ll">LF/LL</span>
+        <a href="/character/{{ character.char_id }}" class="character-card" title="{{ character.name }}">
+            <div class="character-card-image-wrap {% if character.is_zenkai %}character-card-image-wrap-bg-zenkai{% else %}character-card-image-wrap-bg{% endif %} character-card-type-{{ character.type }}">
+                {% if character.icon_url %}
+                <img src="{{ character.icon_url }}" alt="{{ character.name }}" class="character-card-icon-image">
+                {% elif character.image_url %}
+                <img src="{{ character.image_url }}" alt="{{ character.name }}" class="character-card-icon-image">
                 {% endif %}
-                {% if character[5] %}
-                <span class="badge badge-zenkai">Zenkai</span>
-                {% endif %}
+
+                <div class="character-card-name">
+                    {{ character.name }}
+                </div>
+
+                <div class="character-card-info">
+                    <span class="type-pill type-{{ character.type }}">{{ character.type }}</span>
+
+                    {% if character.rarity %}
+                    <span class="rarity-text">{{ character.rarity }}</span>
+                    {% endif %}
+
+                    {% if character.is_ll %}
+                    <span class="badge badge-ll">LF/LL</span>
+                    {% endif %}
+
+                    {% if character.is_zenkai %}
+                    <span class="badge badge-zenkai">Zenkai</span>
+                    {% endif %}
+                </div>
             </div>
         </a>
         {% endfor %}

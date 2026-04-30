@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ character[1] }}</title>
+    <title>{{ character.name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
@@ -15,13 +15,19 @@
 
     <div class="character-detail">
 
-        <h2>{{ character[1] }}</h2>
+        {% if character.image_url %}
+        <div class="character-detail-image-wrap {% if not character.is_zenkai %}character-detail-image-wrap-bg{% endif %}">
+            <img src="{{ character.image_url }}" alt="{{ character.name }}" class="character-detail-image">
+        </div>
+        {% endif %}
+
+        <h2>{{ character.name }}</h2>
 
         <div class="detail-info">
-            <p><strong>Type:</strong> {{ character[2] }}</p>
-            <p><strong>Rarity:</strong> {{ character[3] }}</p>
-            <p><strong>LF/LL:</strong> {{ "Yes" if character[4] else "No" }}</p>
-            <p><strong>Zenkai:</strong> {{ "Yes" if character[5] else "No" }}</p>
+            <p><strong>Type:</strong> {{ character.type }}</p>
+            <p><strong>Rarity:</strong> {{ character.rarity }}</p>
+            <p><strong>LF/LL:</strong> {{ "Yes" if character.is_ll else "No" }}</p>
+            <p><strong>Zenkai:</strong> {{ "Yes" if character.is_zenkai else "No" }}</p>
         </div>
 
         <div class="detail-tags">

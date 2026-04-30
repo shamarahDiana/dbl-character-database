@@ -3,9 +3,18 @@ import psycopg2
 import os
 from dotenv import load_dotenv
 
+from characters import (
+    characters_bp,
+    load_character_image_map,
+    build_character_summary,
+    build_character_detail,
+)
+
 load_dotenv()
 
 app = Flask(__name__)
+app.register_blueprint(characters_bp)
+
 
 def get_db_connection():
     conn = psycopg2.connect(
@@ -16,7 +25,8 @@ def get_db_connection():
     )
     return conn
 
-@app.route('/')
+
+@app.route("/")
 def index():
     conn = get_db_connection()
     cur = conn.cursor()
@@ -30,12 +40,12 @@ def index():
     cur.execute("SELECT tag_name FROM tags ORDER BY tag_name")
     tags = [row[0] for row in cur.fetchall()]
 
-    search = request.args.get('search', '')
-    type_filter = request.args.get('type', '')
-    rarity_filter = request.args.get('rarity', '')
-    tag_filter = request.args.get('tag', '')
-    is_ll_filter = request.args.get('is_ll', '')
-    is_zenkai_filter = request.args.get('is_zenkai', '')
+    search = request.args.get("search", "")
+    type_filter = request.args.get("type", "")
+    rarity_filter = request.args.get("rarity", "")
+    tag_filter = request.args.get("tag", "")
+    is_ll_filter = request.args.get("is_ll", "")
+    is_zenkai_filter = request.args.get("is_zenkai", "")
 
     query = """
         SELECT DISTINCT c.char_id, c.name, t.type_name, r.rarity_name, c.is_ll, c.is_zenkai
@@ -50,7 +60,7 @@ def index():
 
     if search:
         query += " AND c.name ILIKE %s"
-        params.append(f'%{search}%')
+        params.append(f"%{search}%")
 
     if type_filter:
         query += " AND t.type_name = %s"
@@ -66,23 +76,36 @@ def index():
 
     if is_ll_filter:
         query += " AND c.is_ll = %s"
-        params.append(is_ll_filter == 'true')
+        params.append(is_ll_filter == "true")
 
     if is_zenkai_filter:
         query += " AND c.is_zenkai = %s"
-        params.append(is_zenkai_filter == 'true')
+        params.append(is_zenkai_filter == "true")
 
     query += " ORDER BY c.name"
 
     cur.execute(query, params)
-    characters = cur.fetchall()
+    rows = cur.fetchall()
 
     cur.close()
     conn.close()
 
-    return render_template('index.html', types=types, rarities=rarities, tags=tags, characters=characters)
+    image_map = load_character_image_map()
+    characters = [
+        build_character_summary(row, image_map)
+        for row in rows
+    ]
 
-@app.route('/character/<int:char_id>')
+    return render_template(
+        "index.html",
+        types=types,
+        rarities=rarities,
+        tags=tags,
+        characters=characters
+    )
+
+
+@app.route("/character/<int:char_id>")
 def character(char_id):
     conn = get_db_connection()
     cur = conn.cursor()
@@ -94,7 +117,12 @@ def character(char_id):
         JOIN rarities r ON c.rarity_id = r.rarity_id
         WHERE c.char_id = %s
     """, (char_id,))
-    character = cur.fetchone()
+    row = cur.fetchone()
+
+    if row is None:
+        cur.close()
+        conn.close()
+        return "Character not found", 404
 
     cur.execute("""
         SELECT tg.tag_name
@@ -117,7 +145,16 @@ def character(char_id):
     cur.close()
     conn.close()
 
-    return render_template('character.html', character=character, tags=tags, stats=stats)
+    image_map = load_character_image_map()
+    character_data = build_character_detail(row, image_map)
 
-if __name__ == '__main__':
+    return render_template(
+        "character.html",
+        character=character_data,
+        tags=tags,
+        stats=stats
+    )
+
+
+if __name__ == "__main__":
     app.run(debug=True)
