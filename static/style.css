@@ -43,16 +43,22 @@ header p.subtitle {
     margin-top: 5px;
 }
 
-.back-btn {
-    display: inline-block;
-    margin-top: 10px;
-    color: #f0c040;
-    text-decoration: none;
-    font-size: 0.95rem;
+.detail-page-actions {
+    width: min(1176px, calc(100% - 32px));
+    margin: 22px auto 10px;
 }
 
-.back-btn:hover {
-    text-decoration: underline;
+.back-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    background-color: #c8960c;
+    color: #0a0a0f;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .filters {
@@ -415,7 +421,7 @@ header p.subtitle {
 
 .character-detail {
     width: min(1176px, calc(100% - 32px));
-    margin: 30px auto;
+    margin: 0 auto 30px;
     background: rgba(12, 18, 26, 0.94);
     border-radius: 8px;
     padding: 0;
@@ -653,5 +659,14 @@ table tr:hover td {
     .detail-rarity-logo {
         width: 120px;
         height: 42px;
+    }
+
+    .detail-page-actions {
+        width: calc(100% - 20px);
+    }
+
+    .back-btn {
+        width: 100%;
+        text-align: center;
     }
 }

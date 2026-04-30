@@ -48,12 +48,10 @@ def index():
     is_zenkai_filter = request.args.get("is_zenkai", "")
 
     query = """
-        SELECT DISTINCT c.char_id, c.name, t.type_name, r.rarity_name, c.is_ll, c.is_zenkai
+        SELECT c.char_id, c.name, t.type_name, r.rarity_name, c.is_ll, c.is_zenkai
         FROM characters c
         JOIN types t ON c.type_id = t.type_id
         JOIN rarities r ON c.rarity_id = r.rarity_id
-        LEFT JOIN charactertags ct ON c.char_id = ct.char_id
-        LEFT JOIN tags tg ON ct.tag_id = tg.tag_id
         WHERE 1=1
     """
     params = []
@@ -71,7 +69,15 @@ def index():
         params.append(rarity_filter)
 
     if tag_filter:
-        query += " AND tg.tag_name = %s"
+        query += """
+            AND EXISTS (
+                SELECT 1
+                FROM charactertags ct
+                JOIN tags tg ON ct.tag_id = tg.tag_id
+                WHERE ct.char_id = c.char_id
+                AND tg.tag_name = %s
+            )
+        """
         params.append(tag_filter)
 
     if is_ll_filter:
@@ -82,7 +88,18 @@ def index():
         query += " AND c.is_zenkai = %s"
         params.append(is_zenkai_filter == "true")
 
-    query += " ORDER BY c.name"
+    query += """
+        ORDER BY
+            CASE r.rarity_name
+                WHEN 'ULTRA' THEN 1
+                WHEN 'SPARKING' THEN 2
+                WHEN 'LEGEND' THEN 2
+                WHEN 'EXTREME' THEN 3
+                WHEN 'HERO' THEN 4
+                ELSE 99
+            END,
+            c.name
+    """
 
     cur.execute(query, params)
     rows = cur.fetchall()
