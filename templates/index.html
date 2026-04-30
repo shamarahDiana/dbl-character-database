@@ -9,79 +9,217 @@
 <body>
 
     <header>
-        <h1>Dragon Ball Legends Character Database</h1>
-        <p class="subtitle">Browse, search, and filter all characters</p>
+        <div class="content-container">
+            <h1>Dragon Ball Legends Character Database</h1>
+            <p class="subtitle">Browse, search, and filter all characters</p>
+        </div>
     </header>
 
     <div class="filters">
-        <form method="GET" action="/">
-            <input type="text" name="search" placeholder="Search by name..."
-                value="{{ request.args.get('search', '') }}">
+        <div class="content-container">
+            <form method="GET" action="/" id="filter-form">
+                <input
+                    type="text"
+                    name="search"
+                    id="live-search"
+                    placeholder="Search by name..."
+                    autocomplete="off"
+                    value="{{ request.args.get('search', '') }}"
+                >
 
-            <select name="type">
-                <option value="">All Types</option>
-                {% for type in types %}
-                <option value="{{ type }}" {% if request.args.get('type') == type %}selected{% endif %}>
-                    {{ type }}
-                </option>
-                {% endfor %}
-            </select>
+                <select name="type">
+                    <option value="">All Types</option>
+                    {% for type in types %}
+                    <option value="{{ type }}" {% if request.args.get('type') == type %}selected{% endif %}>
+                        {{ type }}
+                    </option>
+                    {% endfor %}
+                </select>
 
-            <select name="rarity">
-                <option value="">All Rarities</option>
-                {% for rarity in rarities %}
-                <option value="{{ rarity }}" {% if request.args.get('rarity') == rarity %}selected{% endif %}>
-                    {{ rarity }}
-                </option>
-                {% endfor %}
-            </select>
+                <select name="rarity">
+                    <option value="">All Rarities</option>
+                    {% for rarity in rarities %}
+                    <option value="{{ rarity }}" {% if request.args.get('rarity') == rarity %}selected{% endif %}>
+                        {{ rarity }}
+                    </option>
+                    {% endfor %}
+                </select>
 
-            <select name="tag">
-                <option value="">All Tags</option>
-                {% for tag in tags %}
-                <option value="{{ tag }}" {% if request.args.get('tag') == tag %}selected{% endif %}>
-                    {{ tag }}
-                </option>
-                {% endfor %}
-            </select>
+                <select name="tag">
+                    <option value="">All Tags</option>
+                    {% for tag in tags %}
+                    <option value="{{ tag }}" {% if request.args.get('tag') == tag %}selected{% endif %}>
+                        {{ tag }}
+                    </option>
+                    {% endfor %}
+                </select>
 
-            <select name="is_ll">
-                <option value="">LF/LL Status</option>
-                <option value="true" {% if request.args.get('is_ll') == 'true' %}selected{% endif %}>LF/LL Only</option>
-                <option value="false" {% if request.args.get('is_ll') == 'false' %}selected{% endif %}>Non LF/LL</option>
-            </select>
+                <select name="is_ll">
+                    <option value="">LF/LL Status</option>
+                    <option value="true" {% if request.args.get('is_ll') == 'true' %}selected{% endif %}>LF/LL Only</option>
+                    <option value="false" {% if request.args.get('is_ll') == 'false' %}selected{% endif %}>Non LF/LL</option>
+                </select>
 
-            <select name="is_zenkai">
-                <option value="">Zenkai Status</option>
-                <option value="true" {% if request.args.get('is_zenkai') == 'true' %}selected{% endif %}>Zenkai Only</option>
-                <option value="false" {% if request.args.get('is_zenkai') == 'false' %}selected{% endif %}>Non Zenkai</option>
-            </select>
+                <select name="is_zenkai">
+                    <option value="">Zenkai Status</option>
+                    <option value="true" {% if request.args.get('is_zenkai') == 'true' %}selected{% endif %}>Zenkai Only</option>
+                    <option value="false" {% if request.args.get('is_zenkai') == 'false' %}selected{% endif %}>Non Zenkai</option>
+                </select>
 
-            <button type="submit">Search</button>
-            <a href="/">Clear</a>
-        </form>
+                <button type="submit">Search</button>
+                <a href="/">Clear</a>
+            </form>
+        </div>
     </div>
 
-    <div class="results-count">
-        Showing {{ characters|length }} characters
-    </div>
+    <main class="content-container main-content">
+        <div class="results-count" id="results-count">
+            Showing {{ characters|length }} characters
+        </div>
 
-    <div class="character-grid">
-        {% for character in characters %}
-        <a href="/character/{{ character[0] }}" class="character-card type-border-{{ character[2] }}">
-            <h3>{{ character[1] }}</h3>
-            <p><span class="type-pill type-{{ character[2] }}">{{ character[2] }}</span> {{ character[3] }}</p>
-            <div class="card-badges">
-                {% if character[4] %}
-                <span class="badge badge-ll">LF/LL</span>
-                {% endif %}
-                {% if character[5] %}
-                <span class="badge badge-zenkai">Zenkai</span>
-                {% endif %}
-            </div>
-        </a>
-        {% endfor %}
-    </div>
+        <div class="character-grid" id="character-grid">
+            {% for character in characters %}
+            <a
+                href="/character/{{ character.char_id }}"
+                class="character-card"
+                title="{{ character.name }}"
+                data-name="{{ character.name|lower }}"
+                data-rarity="{{ character.rarity|upper }}"
+                data-original-index="{{ loop.index0 }}"
+            >
+                <div class="character-thumb {% if character.is_zenkai %}character-thumb-bg-zenkai{% else %}character-thumb-bg{% endif %}">
+                    <div class="backing {{ character.type }}"></div>
+
+                    {% if character.icon_url %}
+                    <img
+                        src="{{ character.icon_url }}"
+                        alt="{{ character.name }}"
+                        class="carder"
+                        loading="lazy"
+                        decoding="async"
+                        width="190"
+                        height="190"
+                    >
+                    {% elif character.image_url %}
+                    <img
+                        src="{{ character.image_url }}"
+                        alt="{{ character.name }}"
+                        class="carder"
+                        loading="lazy"
+                        decoding="async"
+                        width="190"
+                        height="190"
+                    >
+                    {% endif %}
+
+                    {% if character.is_ll %}
+                    <div class="lfbanner"></div>
+                    <div class="lfname">LEGENDS LIMITED</div>
+                    {% endif %}
+
+                    {% if character.is_zenkai %}
+                    <div class="zenkaiicon"></div>
+                    {% endif %}
+
+                    {% if character.rarity == "ULTRA" %}
+                    <div class="rarity ULTRA"></div>
+                    {% elif character.rarity == "SPARKING" %}
+                    <div class="rarity SPARKING"></div>
+                    {% elif character.rarity == "EXTREME" %}
+                    <div class="rarity EXTREME"></div>
+                    {% elif character.rarity == "HERO" %}
+                    <div class="rarity HERO"></div>
+                    {% elif character.rarity == "LEGEND" %}
+                    <div class="rarity LEGEND"></div>
+                    {% endif %}
+
+                    <div class="card-header name">
+                        {{ character.name }}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </main>
+
+    <script>
+        const searchInput = document.getElementById("live-search");
+        const grid = document.getElementById("character-grid");
+        const cards = Array.from(document.querySelectorAll(".character-card"));
+        const resultsCount = document.getElementById("results-count");
+
+        const rarityPriority = {
+            "ULTRA": 1,
+            "SPARKING": 2,
+            "LEGEND": 2,
+            "EXTREME": 3,
+            "HERO": 4
+        };
+
+        let searchFrame = null;
+
+        function normalizeText(text) {
+            return text.toLowerCase().trim();
+        }
+
+        function sortCharactersByRarity() {
+            const sortedCards = [...cards].sort((a, b) => {
+                const rarityA = a.dataset.rarity || "";
+                const rarityB = b.dataset.rarity || "";
+
+                const priorityA = rarityPriority[rarityA] || 99;
+                const priorityB = rarityPriority[rarityB] || 99;
+
+                if (priorityA !== priorityB) {
+                    return priorityA - priorityB;
+                }
+
+                const nameA = a.dataset.name || "";
+                const nameB = b.dataset.name || "";
+
+                if (nameA !== nameB) {
+                    return nameA.localeCompare(nameB);
+                }
+
+                return Number(a.dataset.originalIndex) - Number(b.dataset.originalIndex);
+            });
+
+            sortedCards.forEach(card => {
+                grid.appendChild(card);
+            });
+        }
+
+        function liveSearchCharacters() {
+            const query = normalizeText(searchInput.value);
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const characterName = card.dataset.name || "";
+                const isMatch = characterName.includes(query);
+
+                card.hidden = !isMatch;
+
+                if (isMatch) {
+                    visibleCount++;
+                }
+            });
+
+            resultsCount.textContent = `Showing ${visibleCount} characters`;
+        }
+
+        searchInput.addEventListener("input", () => {
+            if (searchFrame) {
+                cancelAnimationFrame(searchFrame);
+            }
+
+            searchFrame = requestAnimationFrame(liveSearchCharacters);
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            sortCharactersByRarity();
+            liveSearchCharacters();
+        });
+    </script>
 
 </body>
 </html>
