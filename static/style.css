@@ -307,6 +307,46 @@ header p.subtitle {
     background-image: url("/characters_image/rarities/Rarity_SP.webp");
 }
 
+/* Scouter backgrounds per rarity */
+.scouter {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+    opacity: 0.92;
+}
+
+.scouter-ultra {
+    background-image: url("/characters_image/scouter_rarity/scouter_bg_ultra.webp");
+}
+
+.scouter-common {
+    background-image: url("/characters_image/scouter_rarity/scouter_bg_common.webp");
+}
+
+/* Scouter on detail page */
+.detail-scouter {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    pointer-events: none;
+    opacity: 0.85;
+}
+
+.detail-scouter-ultra {
+    background-image: url("/characters_image/scouter_rarity/scouter_bg_ultra.webp");
+}
+
+.detail-scouter-common {
+    background-image: url("/characters_image/scouter_rarity/scouter_bg_common.webp");
+}
+
 .card-header.name {
     position: absolute;
     top: 0;
@@ -424,6 +464,8 @@ header p.subtitle {
     object-position: center center;
     display: block;
     transform: none;
+    position: relative;
+    z-index: 2;
 }
 
 .detail-card-number {
@@ -434,6 +476,7 @@ header p.subtitle {
     font-size: 1.2rem;
     font-weight: bold;
     letter-spacing: 1px;
+    z-index: 3;
 }
 
 .detail-rarity-logo {
@@ -446,6 +489,7 @@ header p.subtitle {
     background-size: contain;
     background-position: right center;
     pointer-events: none;
+    z-index: 3;
 }
 
 .detail-rarity-logo-ULTRA {

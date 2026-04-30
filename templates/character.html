@@ -19,6 +19,11 @@
 
         {% if character.image_url %}
         <div class="character-detail-image-wrap {% if character.is_zenkai %}character-detail-image-wrap-bg-zenkai{% else %}character-detail-image-wrap-bg{% endif %}">
+            {% if character.rarity == "ULTRA" %}
+            <div class="detail-scouter detail-scouter-ultra"></div>
+            {% elif character.rarity in ["SPARKING", "EXTREME", "HERO", "LEGEND"] %}
+            <div class="detail-scouter detail-scouter-common"></div>
+            {% endif %}
             <img src="{{ character.image_url }}" alt="{{ character.name }}" class="character-detail-image">
 
             <div class="detail-card-number">
