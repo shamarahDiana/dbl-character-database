@@ -13,9 +13,9 @@
 
 1. Create a virtual environment
 
-Run this command in the project folder:
+  Run this command in the project folder:
 
-python -m venv venv
+  python -m venv venv
 
 2. Activate the virtual environment
 
