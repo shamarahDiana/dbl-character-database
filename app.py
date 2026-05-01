@@ -34,7 +34,19 @@ def index():
     cur.execute("SELECT type_name FROM types ORDER BY type_name")
     types = [row[0] for row in cur.fetchall()]
 
-    cur.execute("SELECT rarity_name FROM rarities ORDER BY rarity_name")
+    cur.execute("""
+        SELECT rarity_name
+        FROM rarities
+        ORDER BY
+            CASE rarity_name
+                WHEN 'ULTRA' THEN 1
+                WHEN 'SPARKING' THEN 2
+                WHEN 'EXTREME' THEN 3
+                WHEN 'HERO' THEN 4
+                ELSE 99
+            END,
+            rarity_name
+    """)
     rarities = [row[0] for row in cur.fetchall()]
 
     cur.execute("SELECT tag_name FROM tags ORDER BY tag_name")
