@@ -50,7 +50,7 @@ dbl_characters
 ## 5. Restore the database dump
 
 ```bash
-psql -U postgres -d dbl_characters -f database_dump.sql
+psql -U postgres -d dbl_characters -f sql/database_dump.sql
 ```
 
 ## 6. Create a .env file
